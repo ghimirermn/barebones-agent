@@ -55,3 +55,8 @@ Agent: The README describes a minimal AI agent with 2 tools, built for
 learning. It outlines the agent's loop, tools, setup, and provides an
 example of how the agent works.
 ```
+
+## Note
+
+There can be edge cases, error handling and retries are intentionally left out to keep things simple. This repo is only for learning purposes.
+
