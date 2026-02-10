@@ -6,3 +6,9 @@ dependencies = [
     "groq>=1.0.0",
     "python-dotenv>=1.2.1",
 ]
+
+[project.scripts]
+barebones-agent = "barebones_agent.agent:agent_loop"
+
+[tool.setuptools.packages.find]
+where = ["src"]

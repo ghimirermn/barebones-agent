@@ -13,6 +13,16 @@ Uses the [ReAct](https://arxiv.org/abs/2210.03629) pattern — the agent thinks 
 - `read_file(path)` — reads a file
 - `list_directory(path)` — lists a directory
 
+## Project Structure
+
+```
+src/barebones_agent/
+├── __init__.py
+├── agent.py    — main loop (LLM ↔ tools)
+├── prompt.py   — system prompt
+└── tools.py    — tool implementations
+```
+
 ## Setup
 
 1. Get a free key from [console.groq.com](https://console.groq.com)
@@ -22,8 +32,8 @@ Uses the [ReAct](https://arxiv.org/abs/2210.03629) pattern — the agent thinks 
    ```
 3. Install and run:
    ```
-   uv add groq python-dotenv
-   uv run python agent.py
+   uv sync
+   uv run python src/barebones_agent/agent.py
    ```
 
 ## Example
@@ -35,8 +45,8 @@ You: list files in this folder and tell me what the readme says
   list the files in the folder to confirm the readme exists.
 
   (action) list_directory({'path': '.'})
-  (observation) .env, .git, .venv, agent.py, prompt.py, pyproject.toml,
-  README.md, requirements.txt, tools.py, uv.lock, __pycache__
+  (observation) .env, .git, .venv, pyproject.toml,
+  README.md, src, uv.lock
 
   (action) read_file({'path': 'README.md'})
   (observation) # Barebones Agent ...
