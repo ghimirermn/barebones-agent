@@ -1,4 +1,9 @@
 import os
+import io
+import contextlib
+import traceback
+
+from barebones_agent.rag import rag_search
 
 
 def read_file(path):
@@ -21,9 +26,21 @@ def list_directory(path):
         return f"Error listing directory: {e}"
 
 
+def run_python(code):
+    buffer = io.StringIO()
+    try:
+        with contextlib.redirect_stdout(buffer):
+            exec(code, {})
+        return buffer.getvalue() or "Code executed successfully."
+    except Exception:
+        return traceback.format_exc()
+
+
 TOOL_MAP = {
     "read_file": read_file,
     "list_directory": list_directory,
+    "run_python": run_python,
+    "rag_search": rag_search,
 }
 
 

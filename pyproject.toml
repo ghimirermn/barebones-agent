@@ -5,6 +5,7 @@ requires-python = ">=3.13"
 dependencies = [
     "groq>=1.0.0",
     "python-dotenv>=1.2.1",
+    "scikit-learn>=1.6.0",
 ]
 
 [project.scripts]

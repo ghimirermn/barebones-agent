@@ -1,7 +1,7 @@
 import os
 import json
 from dotenv import load_dotenv
-from groq import Groq
+from groq import Groq, BadRequestError
 from barebones_agent.prompt import SYSTEM_PROMPT
 from barebones_agent.tools import execute_tool
 
@@ -39,6 +39,38 @@ TOOLS = [
             },
         },
     },
+    {
+        "type": "function",
+        "function": {
+            "name": "run_python",
+            "description": "Execute a Python code snippet and return its stdout output or error traceback.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "code": {"type": "string", "description": "Python code to execute"}
+                },
+                "required": ["code"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "rag_search",
+            "description": "Search documents in a file or directory for content relevant to a query. Returns the most relevant text chunks with semantic similarity.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {"type": "string", "description": "Search query"},
+                    "path": {
+                        "type": "string",
+                        "description": "Path to a file or directory of documents to search",
+                    },
+                },
+                "required": ["query", "path"],
+            },
+        },
+    },
 ]
 
 def agent_loop():
@@ -55,10 +87,19 @@ def agent_loop():
 
         messages.append({"role": "user", "content": user_input})
 
-        while True:    
-            response = client.chat.completions.create(
-                model=MODEL, messages=messages, tools=TOOLS, tool_choice="auto"
-            )
+        while True:
+            try:
+                response = client.chat.completions.create(
+                    model=MODEL, messages=messages, tools=TOOLS, tool_choice="auto"
+                )
+            except BadRequestError as e:
+                print(f"\n  (error) Model produced a malformed tool call, retrying...")
+                # re asking the model with a hint
+                messages.append(
+                    {"role": "user", "content": "Your last tool call was malformed. Please try again using the correct tool format."}
+                )
+                continue
+
             msg = response.choices[0].message
             messages.append(msg)
 
