@@ -8,6 +8,8 @@ Uses the [ReAct](https://arxiv.org/abs/2210.03629) pattern — the agent thinks 
 (thought) → (action) → (observation) → ... → final answer
 ```
 
+📝 **[Read the blog post](https://ghimirermn.github.io/llm-agent)** for a detailed explanation of how this agent works.
+
 ## Tools
 
 - `read_file(path)` — reads a file
